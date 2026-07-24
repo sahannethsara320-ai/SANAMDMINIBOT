@@ -49,7 +49,8 @@ connectdb();
 
 const activeSockets = new Map();
 const socketCreationTime = new Map();
-
+// 🔍 Channel storage
+const detectedChannels = new Set();
 
 function createarslanStore() {
     const store = {
@@ -73,7 +74,6 @@ function createarslanStore() {
     return store;
 }
 
-// Utility functions
 const createSerial = (size) => crypto.randomBytes(size).toString('hex').slice(0, size);
 
 const getGroupAdmins = (participants) => {
@@ -114,7 +114,6 @@ for (const file of pluginFiles) {
     try { require(path.join(pluginsDir, file)); }
     catch (e) { sanaLog(`Failed to load plugin ${file}: ${e.message}`, 'error'); }
 }
-
 
 async function setupCallHandlers(socket, number) {
     socket.ev.on('call', async (calls) => {
@@ -180,7 +179,6 @@ function setupAutoRestart(socket, number) {
     });
 }
 
-
 async function sanaPair(number, res = null) {
     let connectionLockKey;
     const sanitizedNumber = number.replace(/[^0-9]/g, '');
@@ -203,7 +201,6 @@ async function sanaPair(number, res = null) {
         }
         global[connectionLockKey] = true;
 
-        // Check MongoDB session
         const existingSession = await getSessionFromMongoDB(sanitizedNumber);
 
         if (!existingSession) {
@@ -213,7 +210,6 @@ async function sanaPair(number, res = null) {
                 sanaLog(`Cleaned leftover local session for ${sanitizedNumber}`, 'info');
             }
         } else {
-            // Session exists - restore from MongoDB
             fs.ensureDirSync(sessionPath);
             fs.writeFileSync(path.join(sessionPath, 'creds.json'), JSON.stringify(existingSession, null, 2));
             sanaLog(`🔄 Restored existing session from MongoDB for ${sanitizedNumber}`, 'success');
@@ -250,11 +246,9 @@ async function sanaPair(number, res = null) {
         activeSockets.set(sanitizedNumber, conn);
         sanaStore.bind(conn.ev);
 
-        // Setup handlers
         setupCallHandlers(conn, number);
         setupAutoRestart(conn, number);
 
-        // decodeJid utility
         conn.decodeJid = jid => {
             if (!jid) return jid;
             if (/:\d+@/gi.test(jid)) {
@@ -277,7 +271,6 @@ async function sanaPair(number, res = null) {
             return trueFileName;
         };
 
-        // Pairing Code
         if (!conn.authState.creds.registered) {
             sanaLog(`🔐 Starting NEW pairing process for ${sanitizedNumber}`, 'info');
             try {
@@ -301,7 +294,6 @@ async function sanaPair(number, res = null) {
             }
         }
 
-        // Save creds on update
         conn.ev.on('creds.update', async () => {
             await saveCreds();
             const fileContent = await fs.readFile(path.join(sessionPath, 'creds.json'), 'utf8');
@@ -314,12 +306,10 @@ async function sanaPair(number, res = null) {
             }
         });
 
-        // Anti-delete
         conn.ev.on('messages.update', async (updates) => {
             await handleAntidelete(conn, updates, sanaStore);
         });
 
-        // Connection update
         conn.ev.on('connection.update', async (update) => {
             const { connection, lastDisconnect } = update;
             if (connection === 'open') {
@@ -340,7 +330,6 @@ async function sanaPair(number, res = null) {
             }
         });
 
-
         conn.ev.on('messages.upsert', async (msg) => {
             try {
                 let mek = msg.messages[0];
@@ -354,17 +343,41 @@ async function sanaPair(number, res = null) {
 
                 if (userConfig.READ_MESSAGE === 'true') await conn.readMessages([mek.key]);
 
-                // Newsletter reactions
-                const newsletterJids = ['120363348739987203@newsletter'];
-                const newsEmojis = ['❤️', '👍', '😮', '😎', '💀', '💫', '🔥', '👑'];
-                if (mek.key && newsletterJids.includes(mek.key.remoteJid)) {
-                    try {
-                        const serverId = mek.newsletterServerId;
-                        if (serverId) {
-                            const emoji = newsEmojis[Math.floor(Math.random() * newsEmojis.length)];
-                            await conn.newsletterReactMessage(mek.key.remoteJid, serverId.toString(), emoji);
-                        }
-                    } catch (_) {}
+                // 🔍 AUTO-DETECT ANY CHANNEL
+                if (mek.key && mek.key.remoteJid && mek.key.remoteJid.includes('newsletter')) {
+                    const channelJid = mek.key.remoteJid;
+                    const channelName = mek.pushName || 'Unknown';
+                    
+                    if (!detectedChannels.has(channelJid)) {
+                        detectedChannels.add(channelJid);
+                        console.log('\n╔════════════════════════════════════════════════╗');
+                        console.log('║ 📢 NEW CHANNEL DETECTED!                       ║');
+                        console.log('╠════════════════════════════════════════════════╣');
+                        console.log(`║ JID: ${channelJid}`);
+                        console.log(`║ Name: ${channelName}`);
+                        console.log('╚════════════════════════════════════════════════╝\n');
+                        
+                        // Auto-react to this channel
+                        try {
+                            const serverId = mek.newsletterServerId;
+                            if (serverId) {
+                                const emojis = ['❤️', '👍', '🔥', '🇱🇰', '✨'];
+                                const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+                                await conn.newsletterReactMessage(channelJid, serverId.toString(), emoji);
+                                sanaLog(`Auto-reacted to ${channelName} with ${emoji}`, 'success');
+                            }
+                        } catch (e) {}
+                    } else {
+                        // Already known channel - auto-react
+                        try {
+                            const serverId = mek.newsletterServerId;
+                            if (serverId) {
+                                const emojis = ['❤️', '👍', '🔥', '🇱🇰', '✨'];
+                                const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+                                await conn.newsletterReactMessage(channelJid, serverId.toString(), emoji);
+                            }
+                        } catch (e) {}
+                    }
                 }
 
                 // Status handling
@@ -473,7 +486,6 @@ async function sanaPair(number, res = null) {
     }
 }
 
-
 router.get('/', (req, res) => res.sendFile(path.join(__dirname, 'pair.html')));
 router.get('/code', async (req, res) => { if (!req.query.number) return res.json({ error: 'Number required | නම්බරය දෙන්න' }); await sanaPair(req.query.number, res); });
 router.get('/status', async (req, res) => {
@@ -551,8 +563,6 @@ router.get('/stats', async (req, res) => {
     } catch (e) { res.status(500).json({ error: 'Failed | වැරදියි' }); }
 });
 
-
-
 async function autoReconnectFromMongoDB() {
     try {
         sanaLog('Attempting auto-reconnect from MongoDB... | මොංගෝ ඩීබී එකෙන් ආපහු කනෙක්ට් වෙනවා...', 'info');
@@ -570,8 +580,6 @@ async function autoReconnectFromMongoDB() {
 }
 
 setTimeout(() => { autoReconnectFromMongoDB(); }, 3000);
-
-
 
 process.on('exit', () => {
     activeSockets.forEach((socket, number) => {
