@@ -228,13 +228,13 @@ module.exports = {
      * @description Default bot profile image path/URL
      * @type {string}
      */
-    IMAGE_PATH: 'https://ibb.co/tPQm7KZc',
+    IMAGE_PATH: 'https://i.postimg.cc/dtfrgJRn/download-(6).jpg',
     
     /** 
      * @description WhatsApp channel link for updates
      * @type {string}
      */
-    CHANNEL_LINK: 'https://whatsapp.com/channel/0029VarfjW04tRrmwfb8x306',
+    CHANNEL_LINK: 'https://whatsapp.com/channel/0029Vb7x5E817En3hMhKxf36',
 
     // ═══════════════════════════════════════════════════════════════════════
     //  📡 EXTERNAL API INTEGRATIONS
