@@ -1,36 +1,45 @@
-// ==========================================
-//   SANA MD MINI BOT - COMMAND HANDLER CORE
-// ==========================================
+// ═══════════════════════════════════════════════════════════════════════════
+//                    SANA MD MINI BOT - COMMAND HANDLER
+// ═══════════════════════════════════════════════════════════════════════════
 
 var commands = [];
 
 /**
- * Register a new bot command
- * @param {Object} info - Command configuration details
- * @param {Function} func - The execution logic for the command
+ * @description Register a new command for the bot
+ * @param {Object} info - Command information
+ * @param {Function} func - Command function
+ * @returns {Object} Command data
  */
 function cmd(info, func) {
     var data = info;
     data.function = func;
     
-    // Pattern එකක් නොමැති නම් cmdname එක භාවිතා කරයි
+    // Si pas de pattern, on utilise cmdname
+    // If no pattern, use cmdname | pattern එක නැත්නම් cmdname එක use කරන්න
     if (!data.pattern && data.cmdname) data.pattern = data.cmdname;
     
-    // Default variables ආරක්ෂිතව සැකසීම
+    // Default values | Default අගයන්
     if (!data.alias) data.alias = [];
     if (!data.dontAddCommandList) data.dontAddCommandList = false;
-    if (!data.desc) data.desc = 'SANA MD MINI BOT Command';
+    if (!data.desc) data.desc = '';
     if (!data.fromMe) data.fromMe = false;
     if (!data.category) data.category = 'misc';
     
-    // විධාන ලැයිස්තුවට එකතු කිරීම
     commands.push(data);
+    
+    // Log command registration | Command එක register වුණා
+    console.log(`📥 [SANA-MD] Command registered: ${data.pattern || data.cmdname || 'unknown'}`);
+    
     return data;
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// EXPORTS - එකතු කිරීම්
+// ═══════════════════════════════════════════════════════════════════════════
+
 module.exports = {
-    cmd,
-    AddCommand: cmd,
-    Function: cmd,
-    commands,
+    cmd,                    // Main command function
+    AddCommand: cmd,         // Alternative name
+    Function: cmd,           // Alternative name
+    commands,               // All registered commands array
 };
