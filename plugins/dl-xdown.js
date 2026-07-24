@@ -103,7 +103,7 @@ cmd({
 
         // 📦 Info box with SANA MD Logo
         await sock.sendMessage(m.chat, {
-            image: { url: videoData.thumb || "https://ibb.co/tPQm7KZc" },
+            image: { url: videoData.thumb || "https://i.postimg.cc/dtfrgJRn/download-(6).jpg" },
             caption: xBox(videoData)
         }, { quoted: fakevCard });
 
