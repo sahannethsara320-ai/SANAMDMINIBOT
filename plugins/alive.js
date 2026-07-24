@@ -3,7 +3,7 @@ const moment = require("moment");
 const { fakevCard } = require('../lib/fakevCard');
 
 let botStartTime = Date.now(); // Recording the start time of the bot
-const ALIVE_IMG = "https://ibb.co/tPQm7KZc"; 
+const ALIVE_IMG = "https://i.postimg.cc/dtfrgJRn/download-(6).jpg"; 
 
 cmd({
     pattern: "alive",
