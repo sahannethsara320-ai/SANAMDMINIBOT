@@ -82,7 +82,7 @@ cmd({
         
         // Send image with caption (Using your custom logo link)
         await conn.sendMessage(from, {
-            image: { url: "https://ibb.co/tPQm7KZc" },
+            image: { url: "https://i.postimg.cc/dtfrgJRn/download-(6).jpg" },
             caption: `✨ *SANA MD MINI BOT PAIRING* ✨\n\nNotification has been sent to your WhatsApp. Please check your notifications and link your device using the code below.\n\n> ඔබගේ දුරකථනයට පැමිණි Notification එක මත ක්ලික් කර පහත කේතය ඇතුළත් කරන්න.\n\n🔢 *Pairing Code:* *${pairingCode}*\n\n*Owner:* SANA MD\n*Contact:* +94770740571\n\n> *Copy it from the message below 👇🏻*`
         }, { quoted: m });
 
