@@ -1,0 +1,18 @@
+{
+  "name": "♥️SANA MD MINI PAIR♥️",
+  "description": "SESSION ID GENERATOR FOR SANA MD MINI BOT",
+  "logo": "https://ibb.co/tPQm7KZc",
+  "repository": "https://github.com",
+  "keywords": ["@Sana-MD", "whatsapp-bot", "sana-md-mini"],
+  "success_url": "/", 
+  "buildpacks": [
+    { "url": "https://github.com/heroku/heroku-buildpack-nodejs#latest" }
+  ],
+  "env": {      
+    "MESSAGE": {
+      "description": "Msg Attached With Session ID",
+      "value": "🔰 SANA MD MINI BOT || BY SANA MD 🔰",
+      "required": false 
+    }
+  }
+}
