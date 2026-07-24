@@ -14,7 +14,7 @@ SANA MD MINI BOT is a high-speed, multi-device WhatsApp bot designed to provide 
 * **Bot Name:** SANA MD MINI BOT
 * **Developer:** SANA MD
 * **Owner Number:** +94 77 074 0571
-* **Logo:** ![SANA MD](https://ibb.co/tPQm7KZc)
+* **Logo:** ![SANA MD](https://i.postimg.cc/dtfrgJRn/download-(6).jpg)
 
 ---
 💡 *Proudly powered by SANA MD. Clean code, stable performance, and mixed Sinhala/English UI.*
