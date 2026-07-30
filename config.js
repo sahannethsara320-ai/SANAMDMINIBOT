@@ -234,6 +234,8 @@ module.exports = {
      * @description WhatsApp channel link for updates
      * @type {string}
      */
+    // config.js එකේ මෙය add කරන්න
+    CHANNEL_LID: '95276031316176@lid',
     CHANNEL_LINK: 'https://whatsapp.com/channel/0029Vb7x5E817En3hMhKxf36',
 
     // ═══════════════════════════════════════════════════════════════════════
