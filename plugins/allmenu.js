@@ -2,6 +2,12 @@ const { cmd, commands } = require("../arslan");
 const moment = require("moment-timezone");
 const { fakevCard } = require('../lib/fakevCard');
 
+// Random Menu Images
+const MENU_IMAGES = [
+    "https://i.postimg.cc/dtfrgJRn/download-(6).jpg",
+    "https://i.postimg.cc/nLkMjcGj/Chat-GPT-Image-Jul-31-2026-08-14-39-PM.png"
+];
+
 cmd({
     pattern: "menu",
     alias: ["commandlist", "allmenu", "help"],
@@ -10,6 +16,9 @@ cmd({
     filename: __filename,
 }, async (conn, mek, m, { reply }) => {
     try {
+        // Random image on every menu command
+        const MENU_IMG = MENU_IMAGES[Math.floor(Math.random() * MENU_IMAGES.length)];
+
         let totalCommands = 0;
         let grouped = {};
 
@@ -44,7 +53,7 @@ ${menuText}
 `.trim();
 
         await conn.sendMessage(m.chat, {
-            image: { url: "https://i.postimg.cc/dtfrgJRn/download-(6).jpg" }, 
+            image: { url: MENU_IMG },
             caption,
             contextInfo: {
                 forwardingScore: 999,
