@@ -3,7 +3,12 @@ const moment = require("moment");
 const { fakevCard } = require('../lib/fakevCard');
 
 let botStartTime = Date.now(); // Recording the start time of the bot
-const ALIVE_IMG = "https://i.postimg.cc/dtfrgJRn/download-(6).jpg"; 
+
+// Random Alive Images
+const ALIVE_IMAGES = [
+    "https://i.postimg.cc/dtfrgJRn/download-(6).jpg",
+    "https://i.postimg.cc/nLkMjcGj/Chat-GPT-Image-Jul-31-2026-08-14-39-PM.png"
+];
 
 cmd({
     pattern: "alive",
@@ -13,7 +18,10 @@ cmd({
     filename: __filename
 }, async (conn, mek, m, { reply, from }) => {
     try {
-        const pushname = m.pushName || "User"; // Username or default value
+        // Random image on every command
+        const ALIVE_IMG = ALIVE_IMAGES[Math.floor(Math.random() * ALIVE_IMAGES.length)];
+
+        const pushname = m.pushName || "User";
         const currentTime = moment().format("HH:mm:ss");
         const currentDate = moment().format("YYYY-MM-DD");
 
@@ -44,9 +52,9 @@ cmd({
 
         // Send the message with image and caption
         await conn.sendMessage(from, {
-            image: { url: ALIVE_IMG }, // Check that the URL is valid
+            image: { url: ALIVE_IMG },
             caption: formattedInfo,
-            contextInfo: { 
+            contextInfo: {
                 mentionedJid: [m.sender],
                 forwardingScore: 999,
                 isForwarded: true,
@@ -60,13 +68,13 @@ cmd({
 
     } catch (error) {
         console.error("Error in alive command: ", error);
-        
-        // Respond with error details 
+
         const errorMessage = `
 ❌ Alive command එක ක්‍රියාත්මක කිරීමේදී දෝෂයක් ඇති විය.
 🛠 *Error Details*:
 ${error.message}
         `.trim();
+
         return reply(errorMessage);
     }
 });
