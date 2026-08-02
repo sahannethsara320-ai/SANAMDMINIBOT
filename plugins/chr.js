@@ -1,4 +1,4 @@
-const { cmd } = require('../command');
+const { cmd } = require('../arslan');
 const delay = ms => new Promise(res => setTimeout(res, ms)); 
 cmd({
     pattern: "pky",
