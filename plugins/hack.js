@@ -1,6 +1,6 @@
 
 
-const {cmd , commands} = require('../command');
+const {cmd , commands} = require('../arslan');
 
 cmd({
     pattern: "hack",
