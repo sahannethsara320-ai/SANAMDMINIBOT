@@ -1,4 +1,4 @@
-const { cmd } = require('../command');
+const { cmd } = require('../arslan');
 
 
 const readMore = String.fromCharCode(8206).repeat(4001);
