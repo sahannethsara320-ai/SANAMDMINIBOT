@@ -1,4 +1,4 @@
-const { cmd } = require('../command');
+const { cmd } = require('../arslan');
 const { fetchJson } = require('../lib/functions');
 
 cmd({
