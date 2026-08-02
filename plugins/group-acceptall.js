@@ -1,4 +1,4 @@
-const { cmd } = require('../command');
+const { cmd } = require('../arslan');
 
 // Command to list all pending group join requests
 cmd({
