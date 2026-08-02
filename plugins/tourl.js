@@ -1,4 +1,4 @@
-const { cmd } = require('../command');
+const { cmd } = require('../arslan');
 const axios = require('axios');
 const FormData = require('form-data');
 const { downloadContentFromMessage } = require('@whiskeysockets/baileys');
