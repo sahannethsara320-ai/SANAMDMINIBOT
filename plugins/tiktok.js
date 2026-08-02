@@ -1,5 +1,5 @@
 const { fetchJson } = require('../lib/functions');
-const { cmd } = require('../command');
+const { cmd } = require('../arslan');
 
 cmd({
     pattern: "tiktok",  
