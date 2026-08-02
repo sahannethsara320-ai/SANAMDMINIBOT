@@ -1,4 +1,4 @@
-const { cmd } = require('../command');
+const { cmd } = require('../arslan');
 
 cmd({
     pattern: "dp",
