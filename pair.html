@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ SANA MD MINI BOT ⚡</title>
+    <title>💜 SANA MD MINI BOT 💜</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -13,13 +13,15 @@
         }
 
         :root {
-            --neon-green: #00ff88;
-            --neon-pink: #ff0088;
-            --neon-blue: #00ccff;
-            --neon-purple: #9d00ff;
-            --dark-bg: #0a0a0f;
-            --darker-bg: #050508;
-            --glass: rgba(255, 255, 255, 0.03);
+            /* SANA MD MINI BOT logo palette */
+            --neon-green: #c21887;   /* kept as variable name for JS/CSS compatibility */
+            --neon-pink: #d12aa8;
+            --neon-blue: #6d3b91;
+            --neon-purple: #4b1747;
+            --neon-gold: #b47a52;
+            --dark-bg: #030207;
+            --darker-bg: #010104;
+            --glass: rgba(255, 255, 255, 0.035);
         }
 
         body {
@@ -32,6 +34,10 @@
             overflow: hidden;
             position: relative;
         }
+
+       
+        const LOGO_URL = 'https://i.postimg.cc/MTPPd1vk/Chat-GPT-Image-Jul-19-2026-08-41-18-PM.png';
+        document.querySelector('.logo-image').src = LOGO_URL;
 
         /* Animated Background */
         .bg-animation {
@@ -52,9 +58,9 @@
             width: 200%;
             height: 200%;
             background: 
-                radial-gradient(circle at 20% 80%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 0, 136, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(0, 204, 255, 0.05) 0%, transparent 40%);
+                radial-gradient(circle at 20% 80%, rgba(255, 43, 189, 0.10) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(109, 59, 145, 0.045) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(180, 122, 82, 0.035) 0%, transparent 40%);
             animation: bgMove 20s ease-in-out infinite;
         }
 
@@ -72,8 +78,8 @@
             width: 100%;
             height: 100%;
             background-image: 
-                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+                linear-gradient(rgba(255, 43, 189, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 43, 189, 0.035) 1px, transparent 1px);
             background-size: 50px 50px;
             z-index: -1;
             animation: gridMove 10s linear infinite;
@@ -90,13 +96,13 @@
             max-width: 450px;
             background: var(--glass);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 255, 136, 0.2);
+            border: 1px solid rgba(255, 43, 189, 0.2);
             border-radius: 20px;
             padding: 40px 30px;
             position: relative;
             overflow: hidden;
             box-shadow: 
-                0 0 60px rgba(0, 255, 136, 0.1),
+                0 0 50px rgba(194, 24, 135, 0.035),
                 inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
@@ -123,13 +129,13 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 2.2rem;
             font-weight: 900;
-            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-pink), var(--neon-green));
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue), var(--neon-gold), var(--neon-pink));
             background-size: 300% 100%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: rgbText 3s linear infinite;
-            text-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+            text-shadow: 0 0 30px rgba(255, 43, 189, 0.50);
             letter-spacing: 2px;
         }
 
@@ -155,7 +161,7 @@
             padding: 15px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
-            border: 1px solid rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(255, 43, 189, 0.10);
         }
 
         .stat-box {
@@ -167,8 +173,8 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--neon-green);
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px rgba(255, 43, 189, 0.50);
         }
 
         .stat-label {
@@ -179,13 +185,147 @@
             margin-top: 5px;
         }
 
+
+        /* =========================================================
+           LOGO CORE — circular frame matching the supplied logo
+           ========================================================= */
+        .bot-core {
+            height: 205px;
+            margin: 0 0 28px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid rgba(209, 42, 168, .13);
+            border-radius: 18px;
+            background:
+                radial-gradient(circle at center, rgba(194, 24, 135, .055), transparent 42%),
+                radial-gradient(circle at 50% 50%, rgba(109, 59, 145, .035), transparent 68%),
+                linear-gradient(135deg, rgba(194, 24, 135, .025), rgba(180, 122, 82, .02));
+            box-shadow:
+                inset 0 0 45px rgba(194, 24, 135, .025),
+                0 0 35px rgba(109, 59, 145, .025);
+        }
+
+        .bot-core::before,
+        .bot-core::after {
+            content: '';
+            position: absolute;
+            width: 120%;
+            height: 1px;
+            left: -10%;
+            background: linear-gradient(90deg, transparent, rgba(255, 79, 216, .32), rgba(232, 178, 122, .22), transparent);
+        }
+
+        .bot-core::before { top: 18px; }
+        .bot-core::after { bottom: 18px; }
+
+        .logo-frame {
+            position: relative;
+            z-index: 4;
+            width: 112px;
+            height: 112px;
+            border-radius: 50%;
+            padding: 3px;
+            display: grid;
+            place-items: center;
+            background:
+                linear-gradient(135deg, #e8b27a, #ff4fd8 42%, #a855f7 72%, #e8b27a);
+            box-shadow:
+                0 0 18px rgba(209, 42, 168, .28),
+                0 0 42px rgba(109, 59, 145, .08),
+                inset 0 0 18px rgba(255, 255, 255, .07);
+            animation: logoPulse 2.8s ease-in-out infinite;
+        }
+
+        .logo-frame::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 1px solid rgba(209, 42, 168, .22);
+            box-shadow: 0 0 22px rgba(209, 42, 168, .09);
+            animation: ringPulse 2.8s ease-in-out infinite;
+        }
+
+        .logo-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+            background: #08030d;
+            border: 2px solid #050208;
+        }
+
+        @keyframes logoPulse {
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.035); }
+        }
+
+        @keyframes ringPulse {
+            0%,100% { transform: scale(.96); opacity: .55; }
+            50% { transform: scale(1.04); opacity: 1; }
+        }
+
+        .core-caption {
+            position: absolute;
+            z-index: 5;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 4px 12px;
+            border: 1px solid rgba(180,122,82,.18);
+            border-radius: 999px;
+            color: rgba(255,255,255,.72);
+            background: rgba(4,1,8,.78);
+            backdrop-filter: blur(8px);
+            font-family: 'Orbitron', sans-serif;
+            font-size: .48rem;
+            letter-spacing: 2px;
+            white-space: nowrap;
+            box-shadow: 0 0 14px rgba(194,24,135,.06);
+        }
+
+        .core-line {
+            position: absolute;
+            width: 44px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-pink));
+            opacity: .7;
+        }
+
+        .line-left { left: 10%; }
+        .line-right { right: 10%; transform:rotate(180deg); }
+
+        .core-chip {
+            position: absolute;
+            bottom: 38px;
+            padding: 4px 8px;
+            border: 1px solid rgba(255,79,216,.20);
+            border-radius: 4px;
+            color: rgba(255,79,216,.72);
+            font-size: .48rem;
+            letter-spacing: 1.5px;
+            background: rgba(0,0,0,.30);
+        }
+
+        .chip-left { left: 8%; }
+        .chip-right { right: 8%; }
+
+        @media (max-width: 480px) {
+            .bot-core { height: 170px; }
+            .core-chip { font-size: .42rem; }
+        }
+
         /* Input Section */
         .input-section {
             margin-bottom: 20px;
         }
 
         .input-label {
-            color: var(--neon-green);
+            color: var(--neon-pink);
             font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -201,7 +341,7 @@
             width: 100%;
             padding: 18px 20px;
             background: rgba(0, 0, 0, 0.4);
-            border: 2px solid rgba(0, 255, 136, 0.3);
+            border: 2px solid rgba(255, 43, 189, 0.3);
             border-radius: 10px;
             color: #fff;
             font-family: 'Rajdhani', sans-serif;
@@ -214,8 +354,8 @@
         }
 
         .cyber-input:focus {
-            border-color: var(--neon-green);
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 20px rgba(255, 43, 189, 0.3);
             background: rgba(0, 0, 0, 0.6);
         }
 
@@ -227,10 +367,10 @@
         .cyber-button {
             width: 100%;
             padding: 18px;
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 204, 255, 0.1));
+            background: linear-gradient(135deg, rgba(255, 43, 189, 0.10), rgba(0, 204, 255, 0.1));
             border: 2px solid var(--neon-green);
             border-radius: 10px;
-            color: var(--neon-green);
+            color: var(--neon-pink);
             font-family: 'Orbitron', sans-serif;
             font-size: 1rem;
             font-weight: 700;
@@ -243,8 +383,8 @@
         }
 
         .cyber-button:hover {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 204, 255, 0.2));
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+            background: linear-gradient(135deg, rgba(255, 43, 189, 0.2), rgba(0, 204, 255, 0.2));
+            box-shadow: 0 0 30px rgba(255, 43, 189, 0.4);
             transform: translateY(-2px);
         }
 
@@ -255,7 +395,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 43, 189, 0.3), transparent);
             transition: left 0.5s;
         }
 
@@ -305,7 +445,7 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 2rem;
             font-weight: 900;
-            color: var(--neon-green);
+            color: var(--neon-pink);
             text-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
             letter-spacing: 8px;
             animation: codePulse 2s ease-in-out infinite;
@@ -353,8 +493,8 @@
             display: none;
             width: 40px;
             height: 40px;
-            border: 3px solid rgba(0, 255, 136, 0.1);
-            border-top-color: var(--neon-green);
+            border: 3px solid rgba(255, 43, 189, 0.10);
+            border-top-color: var(--neon-pink);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 20px auto;
@@ -394,7 +534,7 @@
         }
 
         .channel-link {
-            color: var(--neon-blue);
+            color: var(--neon-pink);
             text-decoration: none;
             font-size: 0.75rem;
             display: inline-block;
@@ -403,8 +543,8 @@
         }
 
         .channel-link:hover {
-            color: var(--neon-green);
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px rgba(255, 43, 189, 0.50);
         }
 
         /* Responsive */
@@ -434,27 +574,35 @@
 
         <!-- Header -->
         <div class="header">
-            <h1 class="logo-text">⚡ SANA MD ⚡</h1>
-            <p class="subtitle">MINI BOT EDITION</p>
+            <h1 class="logo-text">SANA MD</h1>
+            <p class="subtitle">MINI BOT • PAIRING</p>
         </div>
 
-        <!-- Stats -->
-        <div class="stats-container">
-            <div class="stat-box">
-                <div class="stat-value" id="activeUsers">0</div>
-                <div class="stat-label">Active</div>
+        <!-- Futuristic Bot Core -->
+        <div class="bot-core">
+            <div class="logo-frame" title="SANA MD MINI BOT">
+                <img
+                    class="logo-image"
+                    src="https://i.postimg.cc/MTPPd1vk/Chat-GPT-Image-Jul-19-2026-08-41-18-PM.png"
+                    alt="SANA MD MINI BOT Logo"
+                    onerror="this.style.opacity='0.18';"
+                >
             </div>
-            <div class="stat-box">
-                <div class="stat-value" id="totalPairs">0</div>
-                <div class="stat-label">Paired</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-value" id="uptime">0h</div>
-                <div class="stat-label">Uptime</div>
-            </div>
+
+            <div class="core-line line-left"></div>
+            <div class="core-line line-right"></div>
+            <div class="core-chip chip-left">SECURE LINK</div>
+            <div class="core-chip chip-right">PAIR NODE</div>
+            <div class="core-caption">SANA MD • MINI BOT</div>
         </div>
 
-        <!-- Input Section -->
+        <!-- Hidden values kept so the existing /stats JavaScript remains compatible -->
+        <div class="stats-container" aria-hidden="true" style="display:none;">
+            <span id="activeUsers">0</span>
+            <span id="totalPairs">0</span>
+            <span id="uptime">0h</span>
+        </div>
+<!-- Input Section -->
         <div class="input-section">
             <label class="input-label">📱 Enter WhatsApp Number</label>
             <div class="input-wrapper">
@@ -495,7 +643,7 @@
         <div class="footer">
             <p class="footer-text">POWERED BY DARK TECH ZONE |SANA MD 2026</p>
             <a href="https://whatsapp.com/channel/0029Vb7x5E817En3hMhKxf36" class="channel-link" target="_blank">
-                🔗 Join Our Channel
+                💜 JOIN OUR CHANNEL
             </a>
         </div>
     </div>
