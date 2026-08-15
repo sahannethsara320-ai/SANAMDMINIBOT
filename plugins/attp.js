@@ -6,7 +6,7 @@ cmd({
     alias: ["attptext", "textsticker", "namesticker", "stickername", "at", "att", "atp"],
     react: "✨",
     desc: "Convert text into animated sticker",
-    category: "sticker",
+    category: "tool",
     use: ".attp <text>",
     filename: __filename
 },
