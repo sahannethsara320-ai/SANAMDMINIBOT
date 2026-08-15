@@ -72,7 +72,7 @@ cmd({
     pattern: "xxxvideo",
     alias: ["xxx", "porn", "sex", "sexyvideos", "pornhub", "xvideos", "sexy", "හුත්තෝ", "පොන්", "කැම්"],
     desc: "Search or download Xvideos | Xvideos හොයන්න හා ඩවුන්ලෝඩ් කරන්න",
-    category: "adult",
+    category: "xxx",
     react: "🔞",
     filename: __filename
 }, async (sock, mek, m, { reply }) => {
@@ -101,13 +101,19 @@ cmd({
             videoUrl = videoData.url;
         }
 
-        // 📦 Info box with SANA MD Logo
-        await sock.sendMessage(m.chat, {
-            image: { url: videoData.thumb || "https://i.postimg.cc/dtfrgJRn/download-(6).jpg" },
-            caption: xBox(videoData)
-        }, { quoted: fakevCard });
+        // 🎨 Random SANA MD Logo
+            const randomLogo = [
+               "https://i.postimg.cc/dtfrgJRn/download-(6).jpg",
+               "https://i.postimg.cc/nLkMjcGj/Chat-GPT-Image-Jul-31-2026-08-14-39-PM.png"
+           ][Math.floor(Math.random() * 2)];
 
-        await react(sock, mek, "⏳");
+       // 📦 Info box with random SANA MD Logo
+           await sock.sendMessage(m.chat, {
+               image: { url: videoData.thumb || randomLogo },
+               caption: xBox(videoData)
+           }, { quoted: fakevCard });
+
+           await react(sock, mek, "⏳");
 
         // 🎬 Download
         const file = await downloadXvideo(videoUrl);
