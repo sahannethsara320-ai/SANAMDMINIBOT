@@ -3,7 +3,7 @@ const { cmd } = require('../arslan');
 cmd({
     pattern: 'github',
     desc: 'Fetch GitHub user profile information.',
-    category: 'search',
+    category: 'tool',
     react: '🐙',
     filename: __filename
 }, async (conn, mek, m, { from, args, q, reply }) => {
