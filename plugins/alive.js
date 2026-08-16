@@ -13,7 +13,7 @@ const ALIVE_IMAGES = [
 ];
 
 cmd({
-    pattern: "alive1",
+    pattern: "alive",
     desc: "Check if the bot is active.",
     category: "main",
     react: "💗",
