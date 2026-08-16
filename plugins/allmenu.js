@@ -5,7 +5,9 @@ const { fakevCard } = require('../lib/fakevCard');
 // Random Menu Images
 const MENU_IMAGES = [
     "https://i.postimg.cc/dtfrgJRn/download-(6).jpg",
-    "https://i.postimg.cc/nLkMjcGj/Chat-GPT-Image-Jul-31-2026-08-14-39-PM.png"
+    "https://i.postimg.cc/nLkMjcGj/Chat-GPT-Image-Jul-31-2026-08-14-39-PM.png",
+    "https://i.postimg.cc/Pf978SP2/Chat-GPT-Image-Aug-2-2026-09-00-39-PM.png",
+    "https://i.postimg.cc/bvcbxhpR/Chat-GPT-Image-Aug-2-2026-02-56-11-PM.png"
 ];
 
 cmd({
@@ -53,17 +55,17 @@ cmd({
 ${menuText}
 `.trim();
 
-        await conn.sendMessage(m.chat, {
-            image: { url: MENU_IMG },
-            caption,
+        await conn.sendMessage(from, {
+            image: { url: ALIVE_IMG },
+            caption: formattedInfo,
             contextInfo: {
-                forwardingScore: 1,
-                isForwarded: true,
                 mentionedJid: [m.sender],
+                forwardingScore: 2,
+                isForwarded: true,
                 forwardedNewsletterMessageInfo: {
-                    newsletterJid: "120363425704971310@newsletter",
-                    newsletterName: "𝙎𝘼𝙉𝘼-𝙈𝘿 𝙈𝙞𝙣𝙞 𝙑2",
-                    serverMessageId: 2,
+                    newsletterJid: '120363425704971310@newsletter',
+                    newsletterName: 'SANA-MD - ᴏꜰꜰɪᴄɪᴀʟ',
+                    serverMessageId: 143
                 },
             },
         }, { quoted: fakevCard });
