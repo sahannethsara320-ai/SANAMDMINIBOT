@@ -57,7 +57,7 @@ ${menuText}
             image: { url: MENU_IMG },
             caption,
             contextInfo: {
-                forwardingScore: 999,
+                forwardingScore: 1,
                 isForwarded: true,
                 mentionedJid: [m.sender],
                 forwardedNewsletterMessageInfo: {
