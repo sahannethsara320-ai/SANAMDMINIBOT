@@ -7,11 +7,13 @@ let botStartTime = Date.now(); // Recording the start time of the bot
 // Random Alive Images
 const ALIVE_IMAGES = [
     "https://i.postimg.cc/dtfrgJRn/download-(6).jpg",
-    "https://i.postimg.cc/nLkMjcGj/Chat-GPT-Image-Jul-31-2026-08-14-39-PM.png"
+    "https://i.postimg.cc/nLkMjcGj/Chat-GPT-Image-Jul-31-2026-08-14-39-PM.png",
+    "https://i.postimg.cc/bvcbxhpR/Chat-GPT-Image-Aug-2-2026-02-56-11-PM.png",
+    "https://i.postimg.cc/Pf978SP2/Chat-GPT-Image-Aug-2-2026-09-00-39-PM.png"
 ];
 
 cmd({
-    pattern: "alive",
+    pattern: "alive1",
     desc: "Check if the bot is active.",
     category: "main",
     react: "💗",
