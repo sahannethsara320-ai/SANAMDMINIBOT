@@ -60,7 +60,7 @@ cmd({
                 isForwarded: true,
                 forwardedNewsletterMessageInfo: {
                     newsletterJid: '120363425704971310@newsletter',
-                    newsletterName: 'ꜱᴀɴᴀ-ᴍ - ᴏꜰꜰɪᴄɪᴀʟ',
+                    newsletterName: 'SANA-MD - ᴏꜰꜰɪᴄɪᴀʟ',
                     serverMessageId: 143
                 }
             }
