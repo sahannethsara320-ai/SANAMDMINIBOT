@@ -13,6 +13,7 @@ cmd({
     alias: ["commandlist", "allmenu", "help"],
     desc: "Fetch and display all available bot commands",
     category: "system",
+    react: "📄",
     filename: __filename,
 }, async (conn, mek, m, { reply }) => {
     try {
