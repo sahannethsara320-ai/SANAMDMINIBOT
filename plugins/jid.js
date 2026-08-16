@@ -24,13 +24,13 @@ cmd({
         }
 
         return reply(
-            `╭───〔 📢 CHANNEL JID 〕───╮\n` +
+            `╭────────〔 📢 CHANNEL JID 〕────────╮\n` +
             `│\n` +
             `│ 🆔 JID:\n` +
             `│ ${jid}\n` +
             `│\n` +
-            `│ ✅ Channel JID detected!\n` +
-            `╰──────────────────────╯`
+            `│ ✅ SANA MD Channel JID detected!\n` +
+            `╰────────────────────────────────────╯`
         );
 
     } catch (error) {
