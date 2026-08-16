@@ -61,8 +61,8 @@ ${menuText}
                 isForwarded: true,
                 mentionedJid: [m.sender],
                 forwardedNewsletterMessageInfo: {
-                    newsletterJid: "120363348739987203@newsletter",
-                    newsletterName: "𝙎𝘼𝙉𝘼-𝙈𝘿 𝙈𝙞𝙣𝙞 𝙑²",
+                    newsletterJid: "120363425704971310@newsletter",
+                    newsletterName: "𝙎𝘼𝙉𝘼-𝙈𝘿 𝙈𝙞𝙣𝙞 𝙑2",
                     serverMessageId: 2,
                 },
             },
