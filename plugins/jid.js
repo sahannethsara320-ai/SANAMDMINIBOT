@@ -11,10 +11,12 @@ cmd({
     try {
         const jid = mek?.key?.remoteJid;
 
+        // JID එක නැත්නම්
         if (!jid) {
             return reply("❌ JID එක හොයාගන්න බැරි වුණා.");
         }
 
+        // Channel JID එකක්ද බලන්න
         if (!jid.endsWith("@newsletter")) {
             return reply(
                 `❌ මේක WhatsApp Channel message එකක් නෙවෙයි.\n\n` +
@@ -23,18 +25,43 @@ cmd({
             );
         }
 
+        // ==============================
+        // CHANNEL JID BOX
+        // ==============================
+
+        const title = "📢 CHANNEL JID";
+        const jidText = `🆔 JID: ${jid}`;
+        const status = "✅ SANA MD Channel JID detected!";
+
+        // Longest text එක හොයාගන්න
+        const width = Math.max(
+            [...title].length,
+            [...jidText].length,
+            [...status].length
+        );
+
+        // Box borders
+        const top = `+${"-".repeat(width + 2)}+`;
+        const empty = `|${" ".repeat(width + 2)}|`;
+
+        // Final message
         return reply(
-            `╭────────〔 📢 CHANNEL JID 〕────────╮\n` +
-            `│\n` +
-            `│ 🆔 JID:\n` +
-            `│ ${jid}\n` +
-            `│\n` +
-            `│ ✅ SANA MD Channel JID detected!\n` +
-            `╰────────────────────────────────────╯`
+` \`\`\`
+${top}
+| ${title.padEnd(width)} |
+${top}
+| ${jidText.padEnd(width)} |
+${empty}
+| ${status.padEnd(width)} |
+${top}
+\`\`\``
         );
 
     } catch (error) {
         console.error("GetJID Error:", error);
-        return reply("❌ JID ලබාගැනීමේදී error එකක් ආවා.");
+
+        return reply(
+            "❌ JID ලබාගැනීමේදී error එකක් ආවා."
+        );
     }
 });
