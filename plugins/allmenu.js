@@ -55,9 +55,9 @@ cmd({
 ${menuText}
 `.trim();
 
-        await conn.sendMessage(from, {
+        await conn.sendMessage(m.chat, {
             image: { url: ALIVE_IMG },
-            caption: formattedInfo,
+            caption,
             contextInfo: {
                 mentionedJid: [m.sender],
                 forwardingScore: 2,
@@ -65,7 +65,7 @@ ${menuText}
                 forwardedNewsletterMessageInfo: {
                     newsletterJid: '120363425704971310@newsletter',
                     newsletterName: 'SANA-MD - ᴏꜰꜰɪᴄɪᴀʟ',
-                    serverMessageId: 143
+                    serverMessageId: 143,
                 },
             },
         }, { quoted: fakevCard });
