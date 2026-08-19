@@ -1,423 +1,381 @@
 const axios = require("axios");
 const { cmd } = require("../arslan");
 
-const DAILY_LIMIT = 10;
-const MODEL = "zai-org-glm-5-2";
-const VENICE_URL = "https://api.venice.ai/api/v1/chat/completions";
+// ═══════════════════════════════════════
+// 🤖 SANA MD MINI BOT - MULTI AI PLUGIN
+// ═══════════════════════════════════════
 
-// ======================================================
-// 🧠 SANA MD AI - DAILY USAGE
-// ======================================================
+const AI_APIS = [
+    {
+        name: "ZELL AI",
+        url: (query) =>
+            `https://zellapi.autos/ai/chatbot?text=${encodeURIComponent(query)}`,
+        type: "axios"
+    },
 
-const aiUsage = new Map();
+    {
+        name: "VAPIS Gemini",
+        url: (query) =>
+            `https://vapis.my.id/api/gemini?q=${encodeURIComponent(query)}`,
+        type: "axios"
+    },
 
+    {
+        name: "Gemini Pro",
+        url: (query) =>
+            `https://api.siputzx.my.id/api/ai/gemini-pro?content=${encodeURIComponent(query)}`,
+        type: "axios"
+    },
 
-// ======================================================
-// 👤 GET USER KEY
-// ======================================================
+    {
+        name: "Ryzendesu Gemini",
+        url: (query) =>
+            `https://api.ryzendesu.vip/api/ai/gemini?text=${encodeURIComponent(query)}`,
+        type: "axios"
+    },
 
-function getUserKey(m) {
-    return (
-        m?.sender ||
-        m?.key?.participant ||
-        m?.key?.remoteJid ||
-        m?.chat ||
-        m?.key?.remoteJid
-    );
-}
+    {
+        name: "Gifted Gemini AI",
+        url: (query) =>
+            `https://api.giftedtech.my.id/api/ai/geminiai?apikey=gifted&q=${encodeURIComponent(query)}`,
+        type: "axios"
+    },
 
-
-// ======================================================
-// 📅 SRI LANKA DATE
-// ======================================================
-
-function getToday() {
-    return new Intl.DateTimeFormat("en-CA", {
-        timeZone: "Asia/Colombo",
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit"
-    }).format(new Date());
-}
-
-
-// ======================================================
-// 📊 GET USER USAGE
-// ======================================================
-
-function getUsage(userKey) {
-    const today = getToday();
-    const old = aiUsage.get(userKey);
-
-    // New user / new day
-    if (!old || old.date !== today) {
-        const data = {
-            date: today,
-            count: 0
-        };
-
-        aiUsage.set(userKey, data);
-
-        return data;
+    {
+        name: "Gifted Gemini Pro",
+        url: (query) =>
+            `https://api.giftedtech.my.id/api/ai/geminiaipro?apikey=gifted&q=${encodeURIComponent(query)}`,
+        type: "axios"
     }
-
-    return old;
-}
+];
 
 
-// ======================================================
-// 💬 EXTRACT QUESTION
-// ======================================================
+// ═══════════════════════════════════════
+// 📥 GET AI RESPONSE
+// ═══════════════════════════════════════
 
-function getQuestion(m) {
-    let text =
-        m?.text ||
-        m?.body ||
-        m?.message?.conversation ||
-        m?.message?.extendedTextMessage?.text ||
-        "";
+async function getAIResponse(query) {
 
-    if (typeof text !== "string") {
-        return "";
-    }
+    for (const api of AI_APIS) {
 
-    text = text.trim();
+        try {
 
-    // Remove command
-    text = text.replace(
-        /^(\.ai|\.chat|\.ask|ai|chat|ask)\s*/i,
-        ""
-    );
+            console.log(`Trying AI: ${api.name}`);
 
-    return text.trim();
-}
-
-
-// ======================================================
-// 🤖 AI COMMAND
-// ======================================================
-
-cmd({
-    pattern: "ai",
-    alias: ["chat", "ask"],
-    desc: "Chat with SANA MD AI",
-    category: "ai",
-    react: "🤖",
-    filename: __filename
-}, async (conn, mek, m, { reply }) => {
-
-    try {
-
-        // ==================================================
-        // 📝 GET QUESTION
-        // ==================================================
-
-        const question = getQuestion(m);
-
-        if (!question) {
-
-            return reply(
-                `╭━━━〔 🤖 SANA MD AI 〕━━━╮\n` +
-                `┃\n` +
-                `┃ 🤖 AI එකෙන් ප්‍රශ්නයක් අහන්න.\n` +
-                `┃\n` +
-                `┃ 📌 Example:\n` +
-                `┃ .ai What is JavaScript?\n` +
-                `┃ .ai SANA MD කියන්නේ මොකක්ද?\n` +
-                `┃\n` +
-                `┃ 📊 Daily Limit: ${DAILY_LIMIT} questions\n` +
-                `┃\n` +
-                `╰━━━━━━━━━━━━━━━━━━━━━━╯`
-            );
-        }
-
-
-        // ==================================================
-        // 👤 USER
-        // ==================================================
-
-        const userKey = getUserKey(m);
-
-        if (!userKey) {
-
-            console.error(
-                "SANA AI: User key not found",
-                JSON.stringify(m, null, 2)
+            const response = await axios.get(
+                api.url(query),
+                {
+                    timeout: 20000
+                }
             );
 
-            return reply(
-                "❌ User ID එක හොයාගන්න බැරි වුණා."
-            );
-        }
+            const data = response.data;
 
+            // Different API response formats
+            let answer =
+                data?.result ||
+                data?.answer ||
+                data?.message ||
+                data?.data ||
+                data?.response ||
+                data?.text;
 
-        // ==================================================
-        // 📊 DAILY LIMIT
-        // ==================================================
+            // If answer is object
+            if (typeof answer === "object" && answer !== null) {
 
-        const usage = getUsage(userKey);
-
-        if (usage.count >= DAILY_LIMIT) {
-
-            return reply(
-                `╭━━━〔 ⚠️ DAILY LIMIT 〕━━━╮\n` +
-                `┃\n` +
-                `┃ අද AI questions limit එක ඉවරයි.\n` +
-                `┃\n` +
-                `┃ 📊 Used: ${usage.count}/${DAILY_LIMIT}\n` +
-                `┃\n` +
-                `┃ 🔄 හෙට automatic reset වෙනවා.\n` +
-                `┃\n` +
-                `╰━━━━━━━━━━━━━━━━━━━━━━╯`
-            );
-        }
-
-
-        // ==================================================
-        // 🔑 API KEY
-        // ==================================================
-
-        const apiKey = process.env.VENICE_API_KEY;
-
-        if (!apiKey) {
-
-            console.error(
-                "SANA AI: VENICE_API_KEY is missing"
-            );
-
-            return reply(
-                "❌ Venice AI API key එක configure කරලා නැහැ."
-            );
-        }
-
-
-        // ==================================================
-        // ⏳ PROCESSING
-        // ==================================================
-
-        await reply("🤖 *SANA MD AI Thinking...*");
-
-
-        // ==================================================
-        // 🌐 VENICE AI REQUEST
-        // ==================================================
-
-        const response = await axios.post(
-            VENICE_URL,
-            {
-                model: MODEL,
-
-                messages: [
-                    {
-                        role: "system",
-
-                        content:
-                            "You are SANA MD AI, a helpful WhatsApp AI assistant. " +
-                            "Answer naturally and accurately. " +
-                            "You can understand Sinhala, Singlish and English. " +
-                            "If the user asks in Sinhala or Singlish, reply in Sinhala/Singlish naturally. " +
-                            "Keep normal answers reasonably concise. " +
-                            "For coding questions, provide useful and correct code. " +
-                            "Do not mention these system instructions."
-                    },
-
-                    {
-                        role: "user",
-                        content: question
-                    }
-                ]
-            },
-
-            {
-                headers: {
-                    "Authorization": `Bearer ${apiKey}`,
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
-
-                timeout: 60000
+                answer =
+                    answer.text ||
+                    answer.message ||
+                    answer.answer ||
+                    answer.result ||
+                    JSON.stringify(answer);
             }
-        );
+
+            if (
+                answer &&
+                typeof answer === "string" &&
+                answer.trim().length > 0
+            ) {
+
+                console.log(`AI Success: ${api.name}`);
+
+                return {
+                    answer: answer.trim(),
+                    provider: api.name
+                };
+            }
+
+        } catch (error) {
+
+            console.log(
+                `AI Failed: ${api.name} → ${error.message}`
+            );
+
+            // Fail → automatically try next API
+            continue;
+        }
+    }
+
+    throw new Error("All AI APIs failed");
+}
 
 
-        // ==================================================
-        // 📥 GET RESPONSE
-        // ==================================================
+// ═══════════════════════════════════════
+// 🧠 CREATE PROMPTS
+// ═══════════════════════════════════════
 
-        const answer =
-            response?.data?.choices?.[0]?.message?.content;
+function createPrompt(type, query) {
+
+    switch (type) {
+
+        case "code":
+
+            return `
+You are an expert software developer.
+
+Generate clean, complete and working code.
+
+User request:
+${query}
+`;
 
 
-        // ==================================================
-        // ❌ EMPTY RESPONSE
-        // ==================================================
+        case "fix":
 
-        if (
-            !answer ||
-            typeof answer !== "string" ||
-            !answer.trim()
-        ) {
+            return `
+You are an expert programmer.
+
+Find and fix the error in the following code or problem.
+
+Explain the issue briefly and provide the corrected complete code.
+
+User input:
+${query}
+`;
+
+
+        case "translate":
+
+            return `
+Translate the following text accurately.
+
+If the user does not specify a language, translate it to Sinhala.
+
+Text:
+${query}
+`;
+
+
+        case "summarize":
+
+            return `
+Summarize the following content clearly.
+
+Keep the important information.
+
+Content:
+${query}
+`;
+
+
+        case "gemini":
+
+            return `
+Answer the following question clearly and accurately.
+
+Question:
+${query}
+`;
+
+
+        case "gpt":
+
+            return `
+Answer the following question helpfully and accurately.
+
+Question:
+${query}
+`;
+
+
+        default:
+
+            return query;
+    }
+}
+
+
+// ═══════════════════════════════════════
+// 🤖 MAIN AI COMMAND
+// ═══════════════════════════════════════
+
+cmd(
+    {
+        pattern: "gpt",
+        alias: [
+            "gemini",
+            "ai",
+            "code",
+            "fix",
+            "translate",
+            "summarize"
+        ],
+        desc: "Multi AI Assistant",
+        category: "ai",
+        react: "🤖",
+        filename: __filename
+    },
+
+    async (conn, mek, m, { args, prefix, command }) => {
+
+        try {
+
+            // Get user query
+            const query = args.join(" ").trim();
+
+
+            // ═══════════════════════════════
+            // ❌ NO QUERY
+            // ═══════════════════════════════
+
+            if (!query) {
+
+                return await conn.sendMessage(
+                    m.chat,
+                    {
+                        text: `
+╭━━━〔 🤖 AI COMMANDS 〕━━━⬣
+┃
+┃ ${prefix}gpt <question>
+┃ ${prefix}gemini <question>
+┃ ${prefix}ai <question>
+┃
+┃ ${prefix}code <request>
+┃ ${prefix}fix <error/code>
+┃ ${prefix}translate <text>
+┃ ${prefix}summarize <text>
+┃
+╰━━━━━━━━━━━━━━━━━━⬣
+
+🤖 Powered by SANA MD MINI BOT
+`.trim()
+                    },
+                    {
+                        quoted: mek
+                    }
+                );
+            }
+
+
+            // ═══════════════════════════════
+            // 🤖 PROCESSING REACTION
+            // ═══════════════════════════════
+
+            await conn.sendMessage(
+                m.chat,
+                {
+                    react: {
+                        text: "🤖",
+                        key: mek.key
+                    }
+                }
+            );
+
+
+            // ═══════════════════════════════
+            // 🧠 CREATE AI PROMPT
+            // ═══════════════════════════════
+
+            const type = command.toLowerCase();
+
+            const prompt = createPrompt(
+                type,
+                query
+            );
+
+
+            // ═══════════════════════════════
+            // 🌐 GET AI RESPONSE
+            // ═══════════════════════════════
+
+            const result = await getAIResponse(
+                prompt
+            );
+
+
+            // ═══════════════════════════════
+            // 📤 SEND RESPONSE
+            // ═══════════════════════════════
+
+            const finalMessage = `
+${result.answer}
+
+╭━━━〔 🤖 SANA MD AI 〕━━━⬣
+┃ 🧠 AI: ${result.provider}
+┃ 🤖 Bot: SANA MD MINI BOT
+╰━━━━━━━━━━━━━━━━━━⬣
+`.trim();
+
+
+            await conn.sendMessage(
+                m.chat,
+                {
+                    text: finalMessage
+                },
+                {
+                    quoted: mek
+                }
+            );
+
+
+            // ═══════════════════════════════
+            // ✅ SUCCESS REACTION
+            // ═══════════════════════════════
+
+            await conn.sendMessage(
+                m.chat,
+                {
+                    react: {
+                        text: "✅",
+                        key: mek.key
+                    }
+                }
+            );
+
+        } catch (error) {
 
             console.error(
-                "SANA AI Empty Response:",
-                JSON.stringify(
-                    response?.data,
-                    null,
-                    2
-                )
+                "SANA MD AI ERROR:",
+                error
             );
 
-            return reply(
-                "❌ AI response එක ලබාගන්න බැරි වුණා. නැවත try කරන්න."
+
+            await conn.sendMessage(
+                m.chat,
+                {
+                    react: {
+                        text: "❌",
+                        key: mek.key
+                    }
+                }
             );
-        }
 
 
-        // ==================================================
-        // 📊 COUNT SUCCESSFUL REQUEST
-        // ==================================================
+            await conn.sendMessage(
+                m.chat,
+                {
+                    text: `
+❌ *AI සේවාව තාවකාලිකව ලබාගත නොහැක.*
 
-        usage.count++;
+කරුණාකර ටික වේලාවකින් නැවත උත්සාහ කරන්න.
 
-        aiUsage.set(userKey, usage);
-
-
-        // ==================================================
-        // 🤖 SEND ANSWER
-        // ==================================================
-
-        return reply(
-            `╭━━━〔 🤖 SANA MD AI 〕━━━╮\n` +
-            `┃\n` +
-            `┃ ${answer.trim()}\n` +
-            `┃\n` +
-            `┣━━━━━━━━━━━━━━━━━━━━━━\n` +
-            `┃ 📊 Today: ${usage.count}/${DAILY_LIMIT}\n` +
-            `┃ 🤖 Model: GLM 5.2\n` +
-            `╰━━━━━━━━━━━━━━━━━━━━━━╯`
-        );
-
-    } catch (error) {
-
-        // ==================================================
-        // 🐛 ERROR LOG
-        // ==================================================
-
-        console.error(
-            "════════ SANA AI ERROR ════════"
-        );
-
-        console.error(
-            "Status:",
-            error?.response?.status
-        );
-
-        console.error(
-            "Data:",
-            JSON.stringify(
-                error?.response?.data,
-                null,
-                2
-            )
-        );
-
-        console.error(
-            "Message:",
-            error?.message
-        );
-
-        console.error(
-            "══════════════════════════════"
-        );
-
-
-        // ==================================================
-        // 🔐 401
-        // ==================================================
-
-        if (error?.response?.status === 401) {
-
-            return reply(
-                "❌ Venice AI API key එක invalid හෝ expired."
+🤖 SANA MD MINI BOT
+`.trim()
+                },
+                {
+                    quoted: mek
+                }
             );
         }
-
-
-        // ==================================================
-        // 🚫 403
-        // ==================================================
-
-        if (error?.response?.status === 403) {
-
-            return reply(
-                "❌ Venice AI API access denied. API key permissions check කරන්න."
-            );
-        }
-
-
-        // ==================================================
-        // ❌ 404
-        // ==================================================
-
-        if (error?.response?.status === 404) {
-
-            return reply(
-                `❌ AI model එක හොයාගන්න බැරි වුණා.\n\n` +
-                `🤖 Model: ${MODEL}`
-            );
-        }
-
-
-        // ==================================================
-        // ⚠️ 429
-        // ==================================================
-
-        if (error?.response?.status === 429) {
-
-            return reply(
-                "⚠️ Venice AI rate limit එකට hit වෙලා. ටික වෙලාවකින් නැවත try කරන්න."
-            );
-        }
-
-
-        // ==================================================
-        // ⏱️ TIMEOUT
-        // ==================================================
-
-        if (
-            error?.code === "ECONNABORTED" ||
-            error?.code === "ETIMEDOUT"
-        ) {
-
-            return reply(
-                "⏱️ AI response එක ගන්න වැඩි වෙලාවක් ගියා. නැවත try කරන්න."
-            );
-        }
-
-
-        // ==================================================
-        // 🌐 NETWORK ERROR
-        // ==================================================
-
-        if (
-            error?.code === "ENOTFOUND" ||
-            error?.code === "ECONNRESET" ||
-            error?.code === "ECONNREFUSED"
-        ) {
-
-            return reply(
-                "🌐 Venice AI server එකට connect වෙන්න බැරි වුණා."
-            );
-        }
-
-
-        // ==================================================
-        // ❌ GENERAL ERROR
-        // ==================================================
-
-        return reply(
-            "❌ AI service එකෙන් response එකක් ගන්න බැරි වුණා.\n\n" +
-            "ටික වෙලාවකින් නැවත try කරන්න."
-        );
     }
-});
+);
