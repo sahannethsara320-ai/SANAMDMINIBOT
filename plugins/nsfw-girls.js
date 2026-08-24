@@ -38,27 +38,3 @@ cmd({
         reply("❌ Failed to load image. Try again later.");
     }
 });
-
-cmd({
-    pattern: "xgirl",
-    alias: ["xgirls", "ximg"],
-    desc: "Random Anime Girl Image",
-    category: "fun",
-    react: "🌸",
-    filename: __filename
-}, async (conn, mek, m, { from, reply }) => {
-    try {
-        const apiUrl = "https://api.waifu.pics/nsfw/neko";
-
-        await conn.sendMessage(from, {
-            image: { url: apiUrl },
-            caption: "🌸 *Random Anime Girl*\n\n© SANA MD"
-        }, {
-            quoted: fakevCard
-        });
-
-    } catch (err) {
-        console.log("Xgirl error:", err);
-        reply("❌ Failed to load image. Try again later.");
-    }
-});
