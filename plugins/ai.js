@@ -1,36 +1,31 @@
 const axios = require("axios");
+const { cmd } = require("../arslan");
 
 // ======================================================
-// NEOXR AI - 3 API KEY AUTO FALLBACK
+// NEOXR AI - API KEY AUTO FALLBACK
 // ======================================================
 
-// Dashboard එකෙන් generate කරපු NEW keys මෙතන දාන්න
 const API_KEYS = [
-    "lscr8cny1qd5ef3bnkwamp",
-    "38o5e71qyvaixmh6rdw0s",
-    "d5h45wtalv6f5wk49rmdaj"
-];
+    process.env.NEOXR_API_KEY_1,
+    process.env.NEOXR_API_KEY_2,
+    process.env.NEOXR_API_KEY_3
+].filter(Boolean);
 
 const BASE_URL = "https://api.neoxr.eu/api";
 
 // ======================================================
-// GET AI RESPONSE WITH AUTOMATIC KEY FALLBACK
+// GET AI RESPONSE
 // ======================================================
 
 async function getAIResponse(query) {
     let lastError;
 
-    // Key 1 fail -> Key 2
-    // Key 2 fail -> Key 3
+    if (!API_KEYS.length) {
+        throw new Error("No NEOXR API keys configured");
+    }
+
     for (let i = 0; i < API_KEYS.length; i++) {
         const apiKey = API_KEYS[i];
-
-        if (
-            !apiKey ||
-            apiKey.includes("PUT_YOUR")
-        ) {
-            continue;
-        }
 
         try {
             console.log(
@@ -54,31 +49,43 @@ async function getAIResponse(query) {
                 `[NEOXR AI] Key ${i + 1} response received`
             );
 
-            // Different possible response formats
+            console.log("[NEOXR AI] Response:", data);
+
             const answer =
                 data?.result ||
                 data?.data?.result ||
-                data?.data ||
+                data?.data?.message ||
+                data?.data?.text ||
                 data?.message ||
                 data?.answer ||
                 data?.response;
 
-            // Valid answer found
             if (
-                answer &&
-                typeof answer === "string"
+                typeof answer === "string" &&
+                answer.trim()
             ) {
-                return answer;
+                return answer.trim();
             }
 
-            // Sometimes result may be an object
             if (
                 answer &&
                 typeof answer === "object"
             ) {
-                if (answer.text) return answer.text;
-                if (answer.message) return answer.message;
-                if (answer.response) return answer.response;
+                if (typeof answer.text === "string") {
+                    return answer.text;
+                }
+
+                if (typeof answer.message === "string") {
+                    return answer.message;
+                }
+
+                if (typeof answer.response === "string") {
+                    return answer.response;
+                }
+
+                if (typeof answer.result === "string") {
+                    return answer.result;
+                }
             }
 
             throw new Error(
@@ -90,12 +97,8 @@ async function getAIResponse(query) {
 
             console.log(
                 `[NEOXR AI] API Key ${i + 1} failed:`,
-                error.response?.data ||
-                error.message
+                error.response?.data || error.message
             );
-
-            // Automatically try next key
-            continue;
         }
     }
 
@@ -109,175 +112,99 @@ async function getAIResponse(query) {
 // AI COMMAND
 // ======================================================
 
-async function aiCommand(sock, chatId, message) {
+cmd(
+    {
+        pattern: "ai",
+        alias: ["gpt", "gemini"],
+        desc: "Ask anything from AI",
+        category: "ai",
+        react: "🤖",
+        filename: __filename
+    },
 
-    try {
+    async (
+        conn,
+        mek,
+        m,
+        {
+            from,
+            q,
+            args
+        }
+    ) => {
 
-        const text =
-            message.message?.conversation ||
-            message.message?.extendedTextMessage?.text ||
-            "";
+        try {
 
-        if (!text) {
-            return await sock.sendMessage(
-                chatId,
+            // ==========================================
+            // EMPTY QUERY
+            // ==========================================
+
+            const query =
+                q ||
+                args?.join(" ") ||
+                "";
+
+            if (!query.trim()) {
+
+                return await conn.sendMessage(
+                    from,
+                    {
+                        text:
+                            "❌ *AI එකෙන් අහන්න ප්‍රශ්නයක් දෙන්න!*\n\n" +
+                            "*Examples:*\n" +
+                            "• .ai Hello\n" +
+                            "• .ai JavaScript code එකක් හදන්න\n" +
+                            "• .gpt What is Node.js?"
+                    },
+                    {
+                        quoted: mek
+                    }
+                );
+            }
+
+
+            // ==========================================
+            // CALL AI
+            // ==========================================
+
+            const answer =
+                await getAIResponse(query);
+
+
+            // ==========================================
+            // SEND ANSWER
+            // ==========================================
+
+            await conn.sendMessage(
+                from,
                 {
-                    text:
-                        "❌ *ප්‍රශ්නයක් ලබා දෙන්න!*\n" +
-                        "❌ *Please provide a question!*\n\n" +
-                        "*Example:*\n" +
-                        ".ai Hello\n" +
-                        ".gpt ලංකාව ගැන කියන්න"
+                    text: `🤖 *AI RESPONSE*\n\n${answer}`
                 },
                 {
-                    quoted: message
+                    quoted: mek
+                }
+            );
+
+        } catch (error) {
+
+            console.error(
+                "[AI COMMAND ERROR]",
+                error.response?.data ||
+                error.message ||
+                error
+            );
+
+            await conn.sendMessage(
+                from,
+                {
+                    text:
+                        "❌ *AI සේවාව තාවකාලිකව ක්‍රියා නොකරයි.*\n\n" +
+                        "කරුණාකර ටික වේලාවකින් නැවත උත්සාහ කරන්න."
+                },
+                {
+                    quoted: mek
                 }
             );
         }
-
-
-        // ======================================================
-        // COMMAND + QUERY
-        // ======================================================
-
-        const parts = text.trim().split(/\s+/);
-
-        const command =
-            parts[0].toLowerCase();
-
-        const query =
-            parts.slice(1).join(" ").trim();
-
-
-        // ======================================================
-        // EMPTY QUERY
-        // ======================================================
-
-        if (!query) {
-
-            return await sock.sendMessage(
-                chatId,
-                {
-                    text:
-                        "❌ *AI එකෙන් අහන්න ප්‍රශ්නයක් දෙන්න!*\n" +
-                        "❌ *Please provide a question for AI!*\n\n" +
-                        "*Examples:*\n" +
-                        "• .ai Hello\n" +
-                        "• .ai JavaScript code එකක් හදන්න\n" +
-                        "• .gpt What is Node.js?"
-                },
-                {
-                    quoted: message
-                }
-            );
-        }
-
-
-        // ======================================================
-        // SUPPORTED COMMANDS
-        // ======================================================
-
-        const supportedCommands = [
-            ".ai",
-            ".gpt",
-            ".gemini"
-        ];
-
-        if (!supportedCommands.includes(command)) {
-            return;
-        }
-
-
-        // ======================================================
-        // PROCESSING REACTION
-        // ======================================================
-
-        await sock.sendMessage(
-            chatId,
-            {
-                react: {
-                    text: "🤖",
-                    key: message.key
-                }
-            }
-        );
-
-
-        // ======================================================
-        // CALL AI
-        // ======================================================
-
-        const answer =
-            await getAIResponse(query);
-
-
-        // ======================================================
-        // SEND RESPONSE
-        // ======================================================
-
-        await sock.sendMessage(
-            chatId,
-            {
-                text: answer
-            },
-            {
-                quoted: message
-            }
-        );
-
-
-        // ======================================================
-        // SUCCESS REACTION
-        // ======================================================
-
-        await sock.sendMessage(
-            chatId,
-            {
-                react: {
-                    text: "✅",
-                    key: message.key
-                }
-            }
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "[AI COMMAND ERROR]",
-            error.response?.data ||
-            error.message ||
-            error
-        );
-
-
-        // Error reaction
-        await sock.sendMessage(
-            chatId,
-            {
-                react: {
-                    text: "❌",
-                    key: message.key
-                }
-            }
-        );
-
-
-        // Sinhala + English error
-        await sock.sendMessage(
-            chatId,
-            {
-                text:
-                    "❌ *AI සේවාව තාවකාලිකව ක්‍රියා නොකරයි.*\n" +
-                    "❌ *The AI service is temporarily unavailable.*\n\n" +
-                    "කරුණාකර ටික වේලාවකින් නැවත උත්සාහ කරන්න.\n" +
-                    "Please try again in a moment."
-            },
-            {
-                quoted: message
-            }
-        );
     }
-}
-
-module.exports = aiCommand;
+);
