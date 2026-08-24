@@ -72,7 +72,7 @@ cmd({
     pattern: "xxxvideo",
     alias: ["xxx", "porn", "sex", "sexyvideos", "pornhub", "xvideos", "sexy", "හුත්තෝ", "පොන්", "කැම්"],
     desc: "Search or download Xvideos | Xvideos හොයන්න හා ඩවුන්ලෝඩ් කරන්න",
-    category: "xxx",
+    category: "fun",
     react: "🔞",
     filename: __filename
 }, async (sock, mek, m, { reply }) => {
