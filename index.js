@@ -2,27 +2,43 @@
 //    SANA MD MINI BOT - CORE WEB SERVER
 // ==========================================
 
-const express = require('express');
-const app = express();
-const port = process.env.PORT || 8000;
-const bodyParser = require('body-parser');
-const cors = require('cors');
+// Load .env variables
+require("dotenv").config();
 
-// Middleware configurations
+const express = require("express");
+const app = express();
+const bodyParser = require("body-parser");
+const cors = require("cors");
+
+// Environment PORT or default 8000
+const port = process.env.PORT || 8000;
+
+// ==========================================
+// MIDDLEWARE
+// ==========================================
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Routing for the Pair Code generator
-const pairRouter = require('./main');
-app.use('/', pairRouter);
+// ==========================================
+// PAIR CODE ROUTER
+// ==========================================
 
-// Start the Express Server
+const pairRouter = require("./main");
+
+app.use("/", pairRouter);
+
+// ==========================================
+// START SERVER
+// ==========================================
+
 app.listen(port, () => {
-    console.log(`==========================================`);
-    console.log(`✨ SANA MD MINI BOT SERVER IS ACTIVE ✨`);
+    console.log("==========================================");
+    console.log("✨ SANA MD MINI BOT SERVER IS ACTIVE ✨");
     console.log(`🚀 Server is running smoothly on port: ${port}`);
-    console.log(`==========================================`);
+    console.log("🤖 NEOXR AI API ENV Loaded");
+    console.log("==========================================");
 });
 
 module.exports = app;
