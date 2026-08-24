@@ -56,7 +56,7 @@ ${menuText}
 `.trim();
 
         await conn.sendMessage(m.chat, {
-            image: { url: ALIVE_IMG },
+            image: { url: MENU_IMAGES },
             caption,
             contextInfo: {
                 mentionedJid: [m.sender],
