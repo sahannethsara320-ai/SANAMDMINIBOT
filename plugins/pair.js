@@ -1,17 +1,7 @@
-```js
-// ═══════════════════════════════════════════════════════════════════════════
-//  📱 PAIR CODE COMMAND - SANA MD MINI BOT
-// ═══════════════════════════════════════════════════════════════════════════
-
 const { cmd } = require('../arslan');
 const axios = require('axios');
 
-// Railway Pairing API
 const PAIR_API = 'https://sanamdminibot-production.up.railway.app';
-
-// ═══════════════════════════════════════════════════════════════════════
-//  🔗 PAIR COMMAND
-// ═══════════════════════════════════════════════════════════════════════
 
 cmd({
     pattern: "pair",
@@ -34,13 +24,10 @@ cmd({
     reply
 }) => {
     try {
-
-        // Extract phone number
         const phoneNumber = q
             ? q.trim().replace(/[^0-9]/g, '')
             : senderNumber.replace(/[^0-9]/g, '');
 
-        // Validate number
         if (!phoneNumber || phoneNumber.length < 10) {
             return await reply(
                 `❌ *Invalid Number*\n\n` +
@@ -49,7 +36,6 @@ cmd({
             );
         }
 
-        // Processing reaction
         await conn.sendMessage(from, {
             react: {
                 text: "⏳",
@@ -57,18 +43,18 @@ cmd({
             }
         });
 
-        // Railway API
         const apiUrl = `${PAIR_API}/code?number=${encodeURIComponent(phoneNumber)}`;
 
-        console.log("Pair API:", apiUrl);
-
         const response = await axios.get(apiUrl, {
-            timeout: 30000
+            timeout: 30000,
+            proxy: false,
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
+                'Accept': 'application/json'
+            }
         });
 
-        // Check response
         if (!response.data || !response.data.code) {
-
             await conn.sendMessage(from, {
                 react: {
                     text: "❌",
@@ -84,7 +70,6 @@ cmd({
 
         const pairingCode = response.data.code;
 
-        // Send pairing code
         await conn.sendMessage(from, {
             image: {
                 url: "https://i.postimg.cc/dtfrgJRn/download-(6).jpg"
@@ -102,10 +87,8 @@ cmd({
             quoted: mek
         });
 
-        // Send clean code separately
         await reply(`\`${pairingCode}\``);
 
-        // Success reaction
         await conn.sendMessage(from, {
             react: {
                 text: "✅",
@@ -114,12 +97,6 @@ cmd({
         });
 
     } catch (error) {
-
-        console.error(
-            "Pair command error:",
-            error.response?.data || error.message
-        );
-
         await conn.sendMessage(from, {
             react: {
                 text: "❌",
@@ -134,11 +111,6 @@ cmd({
         );
     }
 });
-
-
-// ═══════════════════════════════════════════════════════════════════════
-//  🔗 PAIR2 COMMAND - Detailed
-// ═══════════════════════════════════════════════════════════════════════
 
 cmd({
     pattern: "pair2",
@@ -160,10 +132,7 @@ cmd({
     senderNumber,
     reply
 }) => {
-
     try {
-
-        // Only private chat
         if (isGroup) {
             return await reply(
                 "❌ *This command only works in private chat.*\n\n" +
@@ -171,12 +140,10 @@ cmd({
             );
         }
 
-        // Extract phone number
         const phoneNumber = q
             ? q.trim().replace(/[^0-9]/g, '')
             : senderNumber.replace(/[^0-9]/g, '');
 
-        // Validate
         if (!phoneNumber || phoneNumber.length < 10) {
             return await reply(
                 `❌ *Invalid Number*\n\n` +
@@ -185,7 +152,6 @@ cmd({
             );
         }
 
-        // Processing
         await conn.sendMessage(from, {
             react: {
                 text: "⏳",
@@ -193,18 +159,18 @@ cmd({
             }
         });
 
-        // Railway API
         const apiUrl = `${PAIR_API}/code?number=${encodeURIComponent(phoneNumber)}`;
 
-        console.log("Pair2 API:", apiUrl);
-
         const response = await axios.get(apiUrl, {
-            timeout: 30000
+            timeout: 30000,
+            proxy: false,
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
+                'Accept': 'application/json'
+            }
         });
 
-        // Check response
         if (!response.data || !response.data.code) {
-
             await conn.sendMessage(from, {
                 react: {
                     text: "❌",
@@ -220,7 +186,6 @@ cmd({
 
         const pairingCode = response.data.code;
 
-        // Detailed message
         await conn.sendMessage(from, {
             image: {
                 url: "https://i.postimg.cc/dtfrgJRn/download-(6).jpg"
@@ -244,10 +209,8 @@ cmd({
             quoted: mek
         });
 
-        // Send only code
         await reply(`${pairingCode}`);
 
-        // Success reaction
         await conn.sendMessage(from, {
             react: {
                 text: "✅",
@@ -256,12 +219,6 @@ cmd({
         });
 
     } catch (error) {
-
-        console.error(
-            "Pair2 error:",
-            error.response?.data || error.message
-        );
-
         await conn.sendMessage(from, {
             react: {
                 text: "❌",
@@ -276,4 +233,3 @@ cmd({
         );
     }
 });
-```
