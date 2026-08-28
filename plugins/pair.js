@@ -1,3 +1,4 @@
+```javascript
 // ═══════════════════════════════════════════════════════════════════════════
 //  📱 PAIR CODE COMMAND - SANA MD MINI BOT
 // ═══════════════════════════════════════════════════════════════════════════
@@ -5,8 +6,11 @@
 const { cmd } = require('../arslan');
 const axios = require('axios');
 
+// Railway Pair API
+const PAIR_API = 'https://sanamdminibot-production.up.railway.app';
+
 // ═══════════════════════════════════════════════════════════════════════
-//  🔗 PAIR COMMAND - Get pairing code via message
+//  🔗 PAIR COMMAND
 // ═══════════════════════════════════════════════════════════════════════
 
 cmd({
@@ -17,49 +21,162 @@ cmd({
     category: "main",
     use: ".pair 947XXXXXXXX",
     filename: __filename
-}, async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, senderNumber, reply }) => {
+}, async (conn, mek, m, {
+    from,
+    quoted,
+    body,
+    isCmd,
+    command,
+    args,
+    q,
+    isGroup,
+    senderNumber,
+    reply
+}) => {
     try {
-        // Extract phone number
-        const phoneNumber = q ? q.trim().replace(/[^0-9]/g, '') : senderNumber.replace(/[^0-9]/g, '');
 
-        // Validate
+        // Extract phone number
+        const phoneNumber = q
+            ? q.trim().replace(/[^0-9]/g, '')
+            : senderNumber.replace(/[^0-9]/g, '');
+
+        // Validate number
         if (!phoneNumber || phoneNumber.length < 10) {
-            return await reply(`❌ *Invalid Number*\n\nPlease provide your WhatsApp number with country code.\n*Example:* \`${command} 94770740571\``);
+            return await reply(
+                `❌ *Invalid Number*\n\n` +
+                `Please provide your WhatsApp number with country code.\n\n` +
+                `📌 *Example:* \`${command} 94770740571\``
+            );
         }
 
-        // Show processing
-        await conn.sendMessage(from, { react: { text: "⏳", key: mek.key } });
+        // Processing reaction
+        await conn.sendMessage(from, {
+            react: {
+                text: "⏳",
+                key: mek.key
+            }
+        });
 
-        // Get pairing code from your server
-        const apiUrl = `http://localhost:8000/code?number=${encodeURIComponent(phoneNumber)}`;
-        const response = await axios.get(apiUrl, { timeout: 30000 });
+        // ═══════════════════════════════════════════════════════════════
+        // Railway Pair API
+        // ═══════════════════════════════════════════════════════════════
 
-        if (!response.data || !response.data.code) {
-            return await reply("❌ *Failed to generate pairing code.*\n\nPlease try again later.");
+        const apiUrl =
+            `${PAIR_API}/pair?number=${encodeURIComponent(phoneNumber)}`;
+
+        console.log(`🔗 Pair API Request: ${apiUrl}`);
+
+        const response = await axios.get(apiUrl, {
+            timeout: 30000
+        });
+
+        // Check API response
+        if (
+            !response.data ||
+            !response.data.code
+        ) {
+            console.log("❌ Pair API Response:", response.data);
+
+            await conn.sendMessage(from, {
+                react: {
+                    text: "❌",
+                    key: mek.key
+                }
+            });
+
+            return await reply(
+                "❌ *Failed to generate pairing code.*\n\n" +
+                "The pairing server may be busy or the number may already be paired.\n\n" +
+                "Please try again."
+            );
         }
 
         const pairingCode = response.data.code;
 
-        // Send success message with code
+        // ═══════════════════════════════════════════════════════════════
+        // Success Message
+        // ═══════════════════════════════════════════════════════════════
+
         await conn.sendMessage(from, {
-            image: { url: "https://i.postimg.cc/dtfrgJRn/download-(6).jpg" },
-            caption: `✅ *Pairing Code Generated*\n\n🔢 *Code:* \`${pairingCode}\`\n\n📱 *Instructions:*\n1. Open WhatsApp on your phone\n2. Go to Settings → Linked Devices\n3. Tap "Link a Device"\n4. Enter the code above\n\n⏰ *Note:* Code expires in 2 minutes`
-        }, { quoted: mek });
+            image: {
+                url: "https://i.postimg.cc/dtfrgJRn/download-(6).jpg"
+            },
+            caption:
+                `╭━━━〔 *SANA MD MINI BOT* 〕━━━┈⊷\n` +
+                `┃\n` +
+                `┃ 🔐 *PAIRING CODE GENERATED*\n` +
+                `┃\n` +
+                `╰━━━━━━━━━━━━━━━━━━━━┈⊷\n\n` +
+
+                `🔢 *CODE:* \`${pairingCode}\`\n\n` +
+
+                `📱 *HOW TO CONNECT*\n\n` +
+                `1️⃣ Open WhatsApp\n` +
+                `2️⃣ Go to *Settings*\n` +
+                `3️⃣ Select *Linked Devices*\n` +
+                `4️⃣ Tap *Link a Device*\n` +
+                `5️⃣ Select *Link with phone number instead*\n` +
+                `6️⃣ Enter the code above\n\n` +
+
+                `⚠️ *IMPORTANT*\n` +
+                `• Code expires shortly\n` +
+                `• Use the code immediately\n` +
+                `• Don't share your pairing code\n\n` +
+
+                `🚀 *SANA MD MINI BOT*`
+        }, {
+            quoted: mek
+        });
 
         // Send clean code separately for easy copying
         await reply(`\`${pairingCode}\``);
 
         // Success reaction
-        await conn.sendMessage(from, { react: { text: "✅", key: mek.key } });
+        await conn.sendMessage(from, {
+            react: {
+                text: "✅",
+                key: mek.key
+            }
+        });
+
+        console.log(
+            `✅ Pairing code generated for ${phoneNumber}`
+        );
 
     } catch (error) {
-        console.error("Pair command error:", error.message);
-        await reply("❌ *Error:* " + (error.message || "Failed to get pairing code"));
+
+        console.error(
+            "❌ Pair command error:",
+            error.response?.data || error.message
+        );
+
+        await conn.sendMessage(from, {
+            react: {
+                text: "❌",
+                key: mek.key
+            }
+        }).catch(() => {});
+
+        let errorMessage =
+            "❌ *Failed to generate pairing code.*";
+
+        if (error.code === 'ECONNABORTED') {
+            errorMessage =
+                "❌ *Pairing server timeout.*\n\nPlease try again.";
+        }
+
+        if (error.response?.data?.error) {
+            errorMessage =
+                `❌ *${error.response.data.error}*`;
+        }
+
+        await reply(errorMessage);
     }
 });
 
+
 // ═══════════════════════════════════════════════════════════════════════
-//  🔗 PAIR2 COMMAND - With more details
+//  🔗 PAIR2 COMMAND - Detailed Pairing
 // ═══════════════════════════════════════════════════════════════════════
 
 cmd({
@@ -70,43 +187,157 @@ cmd({
     category: "main",
     use: ".pair2 947XXXXXXXX",
     filename: __filename
-}, async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, senderNumber, reply }) => {
+}, async (conn, mek, m, {
+    from,
+    quoted,
+    body,
+    isCmd,
+    command,
+    args,
+    q,
+    isGroup,
+    senderNumber,
+    reply
+}) => {
     try {
-        // Only work in private chat
+
+        // Only private chat
         if (isGroup) {
-            return await reply("❌ This command only works in private chat.\n\nPlease message me directly.");
+            return await reply(
+                "❌ *This command only works in private chat.*\n\n" +
+                "Please message me directly."
+            );
         }
 
-        const phoneNumber = q ? q.trim().replace(/[^0-9]/g, '') : senderNumber.replace(/[^0-9]/g, '');
+        // Extract number
+        const phoneNumber = q
+            ? q.trim().replace(/[^0-9]/g, '')
+            : senderNumber.replace(/[^0-9]/g, '');
 
+        // Validate
         if (!phoneNumber || phoneNumber.length < 10) {
-            return await reply(`❌ *Invalid Number*\n\nPlease provide your WhatsApp number.\n*Example:* \`${command} 94770740571\``);
+            return await reply(
+                `❌ *Invalid Number*\n\n` +
+                `Please provide your WhatsApp number with country code.\n\n` +
+                `📌 *Example:* \`${command} 94770740571\``
+            );
         }
 
-        await conn.sendMessage(from, { react: { text: "⏳", key: mek.key } });
+        // Processing reaction
+        await conn.sendMessage(from, {
+            react: {
+                text: "⏳",
+                key: mek.key
+            }
+        });
 
-        const apiUrl = `http://localhost:8000/code?number=${encodeURIComponent(phoneNumber)}`;
-        const response = await axios.get(apiUrl, { timeout: 30000 });
+        // ═══════════════════════════════════════════════════════════════
+        // Railway Pair API
+        // ═══════════════════════════════════════════════════════════════
 
-        if (!response.data || !response.data.code) {
-            return await reply("❌ *Failed to generate code.*\n\nServer might be busy. Please try again.");
+        const apiUrl =
+            `${PAIR_API}/pair?number=${encodeURIComponent(phoneNumber)}`;
+
+        console.log(`🔗 Pair2 API Request: ${apiUrl}`);
+
+        const response = await axios.get(apiUrl, {
+            timeout: 30000
+        });
+
+        // Check response
+        if (
+            !response.data ||
+            !response.data.code
+        ) {
+            console.log("❌ Pair2 API Response:", response.data);
+
+            await conn.sendMessage(from, {
+                react: {
+                    text: "❌",
+                    key: mek.key
+                }
+            });
+
+            return await reply(
+                "❌ *Failed to generate pairing code.*\n\n" +
+                "Server might be busy. Please try again."
+            );
         }
 
         const pairingCode = response.data.code;
 
-        // Detailed message
-        await conn.sendMessage(from, {
-            image: { url: "https://i.postimg.cc/dtfrgJRn/download-(6).jpg" },
-            caption: `🔐 *SANA MD MINI BOT - Pairing*\n\n✅ Code generated successfully!\n\n🔢 *Your Code:* *${pairingCode}*\n\n📋 *How to Connect:*\n1️⃣ Open WhatsApp on your phone\n2️⃣ Tap Settings (or ⋮ menu)\n3️⃣ Select "Linked Devices"\n4️⃣ Tap "Link a Device"\n5️⃣ Enter this code: *${pairingCode}*\n\n⚠️ *Important:*\n• Code expires in 2 minutes\n• Make sure you have stable internet\n• Don't share this code with anyone\n\n🔗 Channel: https://whatsapp.com/channel/0029Vb7x5E817En3hMhKxf36`
-        }, { quoted: mek });
+        // ═══════════════════════════════════════════════════════════════
+        // Detailed Pair Message
+        // ═══════════════════════════════════════════════════════════════
 
-        // Send just the code
+        await conn.sendMessage(from, {
+            image: {
+                url: "https://i.postimg.cc/dtfrgJRn/download-(6).jpg"
+            },
+            caption:
+                `╭━━━〔 *SANA MD MINI BOT* 〕━━━┈⊷\n` +
+                `┃\n` +
+                `┃ 🔐 *PAIRING SYSTEM*\n` +
+                `┃\n` +
+                `╰━━━━━━━━━━━━━━━━━━━━┈⊷\n\n` +
+
+                `✅ *Pairing code generated successfully!*\n\n` +
+
+                `🔢 *YOUR CODE*\n` +
+                `\`${pairingCode}\`\n\n` +
+
+                `📋 *HOW TO CONNECT*\n\n` +
+                `1️⃣ Open WhatsApp on your phone\n` +
+                `2️⃣ Go to *Settings*\n` +
+                `3️⃣ Tap *Linked Devices*\n` +
+                `4️⃣ Tap *Link a Device*\n` +
+                `5️⃣ Select *Link with phone number instead*\n` +
+                `6️⃣ Enter this code:\n\n` +
+                `🔑 *${pairingCode}*\n\n` +
+
+                `⚠️ *IMPORTANT*\n` +
+                `• Use the code immediately\n` +
+                `• Pairing codes expire shortly\n` +
+                `• Never share your code with anyone\n\n` +
+
+                `🚀 *SANA MD MINI BOT*`
+        }, {
+            quoted: mek
+        });
+
+        // Clean code
         await reply(`${pairingCode}`);
 
-        await conn.sendMessage(from, { react: { text: "✅", key: mek.key } });
+        // Success reaction
+        await conn.sendMessage(from, {
+            react: {
+                text: "✅",
+                key: mek.key
+            }
+        });
+
+        console.log(
+            `✅ Pair2 code generated for ${phoneNumber}`
+        );
 
     } catch (error) {
-        console.error("Pair2 error:", error.message);
-        await reply("❌ *Error:* Failed to generate pairing code");
+
+        console.error(
+            "❌ Pair2 error:",
+            error.response?.data || error.message
+        );
+
+        await conn.sendMessage(from, {
+            react: {
+                text: "❌",
+                key: mek.key
+            }
+        }).catch(() => {});
+
+        await reply(
+            "❌ *Failed to generate pairing code.*\n\n" +
+            "Please try again later."
+        );
     }
 });
+```
