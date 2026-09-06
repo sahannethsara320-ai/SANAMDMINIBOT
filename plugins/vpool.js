@@ -4,7 +4,7 @@ cmd({
     pattern: "poll",
     alias: ["vote", "pool"],
     desc: "Create a poll/vote in the group.",
-    category: "other",
+    category: "group",
     use: '.poll Question | Option1 | Option2 | Option3',
     filename: __filename
 },
