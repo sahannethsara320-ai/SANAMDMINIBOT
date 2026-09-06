@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🤖 <span style="background: linear-gradient(90deg, #300000, #ff0000, #8b0000); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SANA MD MINI BOT 🍁</span>
+# <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=32&duration=1200&pause=300&color=FF0000&center=true&vCenter=true&width=850&lines=🤖+SANA+MD+MINI+BOT+🍁;🤖+SANA+MD+MINI+BOT+🍁;🤖+SANA+MD+MINI+BOT+🍁">
 
 <p>
 <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=28&duration=2800&pause=700&color=FF0000&center=true&vCenter=true&width=800&lines=⚡+SANA+MD+MINI+BOT;🔥+FAST+%7C+POWERFUL+%7C+STABLE;🚀+MULTI-DEVICE+BOT">
