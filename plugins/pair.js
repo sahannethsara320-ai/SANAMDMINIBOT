@@ -23,7 +23,7 @@ cmd({
         const response = await axios.get(`https://sanamdminibot-production.up.railway.app/code?number=${encodeURIComponent(phoneNumber)}`);
 
         if (!response.data || !response.data.code) {
-            return await reply("❌ *Failed to retrieve pairing code!* Please try again later.\n\n> Pairing Code එක ලබා ගැනීමට නොහැකි විය. පසුව නැවත උත්සාහ කරන්න.");
+            return await reply("❌ *Failed to retrieve pairing code!* Please try again later.\n\n> Pairing Code එක ලබා ගැනීමට නොහැකි විය. පසුව නැවත උත්සාහ කරන්න.\n\n*Example:* `.pair 94770XXXXXX` ");
         }
 
         const pairingCode = response.data.code;
