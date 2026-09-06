@@ -46,7 +46,7 @@ cmd({
     pattern: "setvv",
     react: "⚙️",
     desc: "Set a custom prefix-less trigger for VV",
-    category: "owner",
+    category: "tool",
     use: '.setvv <emoji or word>',
     filename: __filename
 },
