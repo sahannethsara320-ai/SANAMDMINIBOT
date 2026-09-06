@@ -3,6 +3,7 @@ const { cmd } = require("../arslan");
 cmd({
   on: "body",
   react: "📥",
+  category: "tool",
   filename: __filename
 }, async (client, mek, m, { body, sender, from }) => {
 
