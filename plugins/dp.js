@@ -5,7 +5,7 @@ cmd({
     alias: ["pp", "profile"],
     react: "🖼️",
     desc: "Save WhatsApp/business whatsapp Profile Picture with Number",
-    category: "owner",
+    category: "tool",
     use: '.dp [tag/reply/947xxxxxxx]',
     filename: __filename
 },
