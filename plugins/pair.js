@@ -6,7 +6,7 @@ cmd({
     alias: ["getpair", "pairing", "clonebot"],
     react: "✅",
     desc: "Get pairing code for SANA MD MINI bot",
-    category: "download",
+    category: "main",
     use: ".pair 947707***",
     filename: __filename
 }, async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, senderNumber, reply }) => {
@@ -49,7 +49,7 @@ cmd({
     alias: ["getpair2", "reqpair", "clonebot2"],
     react: "⏳",
     desc: "Get pairing code for SANA MD MINI bot (With Image)",
-    category: "download",
+    category: "main",
     use: ".pair2 947707XXX",
     filename: __filename
 }, async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, senderNumber, reply }) => {
