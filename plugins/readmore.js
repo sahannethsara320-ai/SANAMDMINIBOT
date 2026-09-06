@@ -7,7 +7,7 @@ cmd({
     pattern: "seemore",
     alias: ["readmore", "hidetext"],
     desc: "Create a 'Read More' message.",
-    category: "other",
+    category: "fun",
     react: "📖",
     use: ".seemore උඩ පේන කෑල්ල | යට හැංගෙන කෑල්ල",
     filename: __filename
