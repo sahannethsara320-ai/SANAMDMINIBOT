@@ -7,7 +7,7 @@ cmd({
     pattern: "tourl",
     alias: ["img2url", "upload", "imgurl"],
     desc: "Upload image to ImgBB and get a direct URL.",
-    category: "other",
+    category: "tool",
     react: "🔗",
     filename: __filename
 },
