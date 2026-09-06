@@ -7,7 +7,7 @@ cmd({
     use: '.wp <query>',
     react: "🖼️",
     desc: "Search for high-quality wallpapers.",
-    category: "search",
+    category: "Search",
     filename: __filename
 },
 async (conn, mek, m, { from, q, reply, pushname }) => {
