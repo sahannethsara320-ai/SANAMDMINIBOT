@@ -5,7 +5,7 @@ cmd({
   pattern: "screenshot",
   alias: ["ss", "webshot", "sitepic"],
   react: "🖥️",
-  category: "tools",
+  category: "tool",
   desc: "Take full HD desktop screenshot of a website",
   filename: __filename
 }, async (conn, mek, m, { from, q, reply }) => {
