@@ -4,7 +4,7 @@ cmd({
     pattern: "getjid",
     alias: ["channeljid", "jid"],
     desc: "Get WhatsApp Channel JID",
-    category: "system",
+    category: "tool",
     react: "🆔",
     filename: __filename
 }, async (conn, mek, m, { reply }) => {
