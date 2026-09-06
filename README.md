@@ -3,7 +3,7 @@
 # 🤖 <font color="#00FFFF">SANA MD MINI BOT</font> 🍁
 
 <p>
-<img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=28&duration=2800&pause=700&color=00FFFF&center=true&vCenter=true&width=800&lines=⚡+SANA+MD+MINI+BOT;🔥+FAST+%7C+POWERFUL+%7C+STABLE;🤖+RGB+CYBER+WHATSAPP+BOT;🚀+MULTI-DEVICE+BOT">
+<img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=28&duration=2800&pause=700&color=00FFFF&center=true&vCenter=true&width=800&lines=⚡+SANA+MD+MINI+BOT;🔥+FAST+%7C+POWERFUL+%7C+STABLE;🚀+MULTI-DEVICE+BOT">
 </p>
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=130&section=header&text=SANA%20MD%20MINI%20BOT&fontSize=38&fontColor=ffffff&animation=twinkling">
