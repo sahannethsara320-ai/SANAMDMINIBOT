@@ -1,6 +1,6 @@
 <div align="center">
 
-# <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=48&duration=4500&pause=1200&color=FF0000&center=true&vCenter=true&width=110&height=10&lines=🤖+SANA+MD+MINI+BOT+🍁">
+# <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=48&duration=4500&pause=1200&color=FF0000&center=true&vCenter=true&width=1100&height=100&lines=🤖+SANA+MD+MINI+BOT+🍁">
 
 <p>
 <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=28&duration=2800&pause=700&color=FF0000&center=true&vCenter=true&width=800&lines=⚡+SANA+MD+MINI+BOT;🔥+FAST+%7C+POWERFUL+%7C+STABLE;🚀+MULTI-DEVICE+BOT">
