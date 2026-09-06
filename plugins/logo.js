@@ -10,7 +10,7 @@ cmd({
     use: '.logo <your name>',
     react: "🎨",
     desc: "Create professional logos with 40+ styles",
-    category: "Download",
+    category: "tool",
     filename: __filename
 },
 async(conn, mek, m, { from, q, reply }) => {
