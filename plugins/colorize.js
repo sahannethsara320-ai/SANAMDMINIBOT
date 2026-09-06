@@ -6,7 +6,7 @@ cmd({
     pattern: "colorize",
     alias: ["color", "🎨"],
     desc: "Add color to black and white images.",
-    category: "other",
+    category: "tool",
     react: "🖌️",
     filename: __filename
 },
