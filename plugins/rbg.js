@@ -6,7 +6,7 @@ cmd({
     pattern: "removebg",
     alias: ["rbg", "bgremove"],
     desc: "Remove the background of an image.",
-    category: "image",
+    category: "tool",
     react: "✂️",
     filename: __filename
 },
