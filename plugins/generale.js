@@ -9,7 +9,7 @@ cmd({
     pattern: "uptime",
     alias: ["speed", "ping"],
     desc: "Vérifier la latence et les ressources",
-    category: "general",
+    category: "main",
     react: "👑"
 },
 async(conn, mek, m, { from, reply, myquoted }) => {
@@ -51,7 +51,7 @@ cmd({
     pattern: "owner",
     alias: ["creator", "developer"],
     desc: "Contacter le créateur",
-    category: "general",
+    category: "main",
     react: "👑"
 },
 async(conn, mek, m, { from, myquoted }) => {
